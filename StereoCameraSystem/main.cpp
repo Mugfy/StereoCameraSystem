@@ -36,11 +36,11 @@ int main(void) {
         
     }
 
-    for (int i = 0; i < boardHeight; ++i) {
+    /*for (int i = 0; i < boardHeight; ++i) {
         for (int j = 0; j < boardWidth; ++j) {
             objp.push_back(cv::Point3f(j * squareSize, i * squareSize, 0.0f));
         }
-    }
+    }*/
 
     cv::Mat frame, gray;
     bool found = false;
