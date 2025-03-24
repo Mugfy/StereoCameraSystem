@@ -6,4 +6,21 @@
 #include <vector>
 #include <iostream>
 
-int calibrate(void);
+class Camera {
+
+private:
+    int ID;
+    int boardWidth, boardHeight;
+    float squareSize;
+
+    cv::VideoCapture cap;
+    cv::Mat cameraMatrix, distCoeffs;
+
+public:
+    Camera(int camID, int camBoardWidth, int camBoardHeight, float camSquareSize);
+    void open(); // Ouverture de la caméra
+    int calibrate(); // Calibration de la caméra
+    cv::Mat getDistCoeffs() const; // Getter pour les coefficients de distorsion
+    cv::Mat getCameraMatrix() const; // Getter pour la matrice de la caméra
+
+};

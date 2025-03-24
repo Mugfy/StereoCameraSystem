@@ -1,48 +1,44 @@
 #include "calibration.h"
 
-int calibrate(void) {
+Camera::Camera(int camID, int camBoardWidth, int camBoardHeight, float camSquareSize) {
+    // Affectation aux attributs
+    ID = camID;
+    boardWidth = camBoardWidth;
+    boardHeight = camBoardHeight;
+    squareSize = camSquareSize;
 
-    // Ouvrir la caméra USB (0 est généralement l'ID de la première caméra)
-    cv::VideoCapture cap(0);
+    open();
+}
+
+void Camera::open() {
+    // Ouverture de la caméra
+    cap.open(ID);
     if (!cap.isOpened()) {
-        std::cerr << "Erreur : Impossible d'ouvrir la caméra." << std::endl;
-        return -1;
+        std::cerr << "Erreur : Impossible d'ouvrir la caméra" << ID << "." << std::endl;
+        exit(-1); // Ajouter une gestion d'erreur ici
     }
+    std::cout << "Caméra" << ID << "ouverte avec succès !" << std::endl;
+}
 
-    // Paramètres du damier
-    int boardWidth = 9;  // Nombre de coins horizontaux
-    int boardHeight = 6; // Nombre de coins verticaux
-    float squareSize = 25.0f; // Taille d'un carré en mm
-
+int Camera::calibrate() {
     std::vector<cv::Point2f> corners;
     std::vector<std::vector<cv::Point2f>> cornersSequence;
     std::vector<std::vector<cv::Point3f>> objectPoints;
     std::vector<cv::Point3f> objp;
 
-    // Préparer les points 3D du damier
+    // Préparation des points 3D du damier
     for (int i = 0; i < boardHeight; ++i) {
-        std::vector <cv::Point3f> objp(boardWidth);
-
         for (int j = 0; j < boardWidth; ++j) {
             objp.push_back(cv::Point3f(j * squareSize, i * squareSize, 0.0f));
         }
-
-        objectPoints.push_back(objp);
-
-
     }
-
-    /*for (int i = 0; i < boardHeight; ++i) {
-        for (int j = 0; j < boardWidth; ++j) {
-            objp.push_back(cv::Point3f(j * squareSize, i * squareSize, 0.0f));
-        }
-    }*/
 
     cv::Mat frame, gray;
     bool found = false;
+    int validImagesCaptured = 0; // Compteur d'images valides
 
-    // Capturer des images pour la calibration
-    while (cornersSequence.size() < 10) { // Capturer au moins 10 images
+    while (validImagesCaptured < 10) { // Prise d'images jusqu'à 10 images valides
+
         cap >> frame;
         if (frame.empty()) break;
 
@@ -56,20 +52,33 @@ int calibrate(void) {
             cv::drawChessboardCorners(frame, cv::Size(boardWidth, boardHeight), corners, found);
 
             cornersSequence.push_back(corners);
-            objectPoints.push_back(objp); // Correction : on ajoute objp et non objectPoints
+            objectPoints.push_back(objp); // On stocke les points de l'objet
+
+            validImagesCaptured++; // On incrémente le compteur seulement si l'échiquier est détecté
         }
 
         cv::imshow("Calibration", frame);
         if (cv::waitKey(30) >= 0) break;
     }
 
+    // Vérification si au moins une image a été capturée
+    if (cornersSequence.empty()) {
+        std::cerr << "Erreur : Aucune image valide capturée pour la calibration." << std::endl;
+        return -1;
+    }
+
     // Calibration de la caméra
-    cv::Mat cameraMatrix, distCoeffs;
     std::vector<cv::Mat> rvecs, tvecs;
     cv::calibrateCamera(objectPoints, cornersSequence, gray.size(), cameraMatrix, distCoeffs, rvecs, tvecs);
 
-    std::cout << "Matrice de calibration : " << cameraMatrix << std::endl;
-    std::cout << "Coefficients de distorsion : " << distCoeffs << std::endl;
+    return 0;
 
-	return 0;
+}
+
+cv::Mat Camera::getDistCoeffs() const {
+    return distCoeffs;
+}
+
+cv::Mat Camera::getCameraMatrix() const {
+    return cameraMatrix;
 }
