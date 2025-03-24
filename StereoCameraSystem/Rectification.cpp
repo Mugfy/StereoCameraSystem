@@ -7,11 +7,11 @@
 
 int Rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, const cv::Mat& distCoeffs2) {
     // Ouvrir les caméras
-    cv::VideoCapture cap1(0); // Caméra sur le port USB 1
-    cv::VideoCapture cap2(1); // Caméra sur le port USB 2
+    cv::VideoCapture cap1(1); // Caméra sur le port USB 1
+    cv::VideoCapture cap2(2); // Caméra sur le port USB 2
 
     if (!cap1.isOpened() || !cap2.isOpened()) {
-        std::cerr << "Erreur : Impossible d'ouvrir les caméras." << std::endl;
+        std::cerr << "Erreur : Impossible d'ouvrir les caméras pour la rectification stéréo." << std::endl;
         return -1;
     }
 
@@ -23,18 +23,24 @@ int Rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, co
     std::cout << "Image avec la caméra 2 prise" << std::endl;
 
     // Détecter les points clés et calculer les descripteurs
+
+    //Points clés = points facilement reconnassable (coins par exemple) pour ne pas etre sensible aux variations
+    // Descripteur = vecteur des caratéristiques autour d'un point clé
     cv::Ptr<cv::ORB> orb = cv::ORB::create();
     std::vector<cv::KeyPoint> keypoints1, keypoints2;
     cv::Mat descriptors1, descriptors2;
+    //fonction Opencv pour attribuer les descripteurs aux points clés
     orb->detectAndCompute(img1, cv::Mat(), keypoints1, descriptors1);
     orb->detectAndCompute(img2, cv::Mat(), keypoints2, descriptors2);
 
-    // Mettre en correspondance les points
+    // Mettre en correspondance les points entre les deux images
     cv::BFMatcher matcher(cv::NORM_HAMMING);
     std::vector<cv::DMatch> matches;
     matcher.match(descriptors1, descriptors2, matches);
 
-    // Trier les matches par distance
+    // Trier les matches par distance (ordre croissant)
+    // Plus la distance est faible entre deux vecteurs, plus les chances d'avoir un bon matches sont importantes
+    // (utile pour la rectification)
     std::sort(matches.begin(), matches.end());
 
     // Extraire les points correspondants
@@ -44,7 +50,7 @@ int Rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, co
         points2.push_back(keypoints2[match.trainIdx].pt);
     }
 
-    // Calculer la matrice essentielle
+    // Calculer la matrice essentielle avce fonction classique d'OpenCv
     cv::Mat E = cv::findEssentialMat(points1, points2, K1, cv::RANSAC);
 
     // Récupérer la pose (R, T) à partir de la matrice essentielle
