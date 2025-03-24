@@ -65,6 +65,11 @@ int Rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, co
     cv::Mat R1, R2, P1, P2, Q;
     cv::stereoRectify(K1, distCoeffs1, K2, distCoeffs2, img1.size(), R, T, R1, R2, P1, P2, Q);
 
+    //Affichage des atrices de rotation pour verification : 
+    std::cout << "Matrice de rotation R \n : " << R << std::endl;
+    std::cout << "Matrice de rotation R1 \n : " << R1 << std::endl;
+    std::cout << "Matrice de rotation R2 \n : " << R2 << std::endl;
+
     // Calculer les mappings pour la rectification
     cv::Mat map1x, map1y, map2x, map2y;
     cv::initUndistortRectifyMap(K1, distCoeffs1, R1, P1, img1.size(), CV_32FC1, map1x, map1y);
