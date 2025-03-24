@@ -3,7 +3,7 @@
 int calibrate(void) {
 
     // Ouvrir la caméra USB (0 est généralement l'ID de la première caméra)
-    cv::VideoCapture cap(0);
+    cv::VideoCapture cap(1);
     if (!cap.isOpened()) {
         std::cerr << "Erreur : Impossible d'ouvrir la caméra." << std::endl;
         return -1;
@@ -11,7 +11,7 @@ int calibrate(void) {
 
     // Paramètres du damier
     int boardWidth = 9;  // Nombre de coins horizontaux
-    int boardHeight = 6; // Nombre de coins verticaux
+    int boardHeight = 7; // Nombre de coins verticaux
     float squareSize = 25.0f; // Taille d'un carré en mm
 
     std::vector<cv::Point2f> corners;
