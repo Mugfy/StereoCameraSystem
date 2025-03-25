@@ -151,14 +151,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="calibration.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rectification.cpp" />
+    <ClCompile Include="StereoCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="calibration.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="rectification.h" />
+    <ClInclude Include="StereoCamera.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

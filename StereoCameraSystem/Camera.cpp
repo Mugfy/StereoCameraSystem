@@ -1,4 +1,4 @@
-#include "calibration.h"
+#include "Camera.h"
 
 Camera::Camera(int camID, int camBoardWidth, int camBoardHeight, float camSquareSize) {
     // Affectation aux attributs
@@ -22,8 +22,6 @@ void Camera::open() {
 
 int Camera::calibrate() {
     std::vector<cv::Point2f> corners;
-    std::vector<std::vector<cv::Point2f>> cornersSequence;
-    std::vector<std::vector<cv::Point3f>> objectPoints;
     std::vector<cv::Point3f> objp;
 
     // Préparation des points 3D du damier
@@ -40,6 +38,8 @@ int Camera::calibrate() {
     while (validImagesCaptured < 10) { // Prise d'images jusqu'à 10 images valides
 
         cap >> frame;
+        imageSize = frame.size();
+
         if (frame.empty()) break;
 
         cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
@@ -81,4 +81,16 @@ cv::Mat Camera::getDistCoeffs() const {
 
 cv::Mat Camera::getCameraMatrix() const {
     return cameraMatrix;
+}
+
+std::vector<std::vector<cv::Point3f>> Camera::getObjectPoints() const {
+    return objectPoints;
+}
+
+std::vector<std::vector<cv::Point2f>> Camera::getImagePoints() const {
+    return cornersSequence;
+}
+
+cv::Size Camera::getImageSize() const {
+    return imageSize;
 }

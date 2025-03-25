@@ -1,5 +1,5 @@
 #pragma once
 
 #include <iostream>
-#include "calibration.h"
-#include "rectification.h"
+#include "Camera.h"
+#include "StereoCamera.h"
