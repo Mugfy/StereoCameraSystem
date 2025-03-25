@@ -1,11 +1,6 @@
-#include <opencv2/opencv.hpp>
-#include <opencv2/calib3d.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/features2d.hpp>
-#include <iostream>
+#include "rectification.h"
 
-int Rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, const cv::Mat& distCoeffs2) {
+int rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, const cv::Mat& distCoeffs2) {
     // Ouvrir les caméras
     cv::VideoCapture cap1(1); // Caméra sur le port USB 1
     cv::VideoCapture cap2(2); // Caméra sur le port USB 2
