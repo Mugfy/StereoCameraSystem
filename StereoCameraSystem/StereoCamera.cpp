@@ -18,3 +18,19 @@ int StereoCamera::calibrate() {
 
     return 0;
 }
+
+cv::Mat StereoCamera::getR() const {
+    return R;
+}
+
+cv::Mat StereoCamera::getT() const {
+    return T;
+}
+
+cv::Mat StereoCamera::getE() const {
+    return E;
+}
+
+cv::Mat StereoCamera::getF() const {
+    return F;
+}

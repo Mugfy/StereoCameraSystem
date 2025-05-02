@@ -19,5 +19,8 @@ private:
 public:
     StereoCamera(const Camera&, const Camera&);
     int calibrate();
-
+    cv::Mat getR() const;
+    cv::Mat getT() const;
+    cv::Mat getE() const;
+    cv::Mat getF() const;
 };
