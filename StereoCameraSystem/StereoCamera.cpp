@@ -34,3 +34,17 @@ cv::Mat StereoCamera::getE() const {
 cv::Mat StereoCamera::getF() const {
     return F;
 }
+
+
+cv::Mat StereoCamera::getK1() const {
+    return cam1.getCameraMatrix();
+}
+cv::Mat StereoCamera::getDC1() const {
+    return cam1.getDistCoeffs();
+}
+cv::Mat StereoCamera::getK2() const {
+    return cam2.getCameraMatrix();
+}
+cv::Mat StereoCamera::getDC2() const {
+    return cam2.getDistCoeffs();
+}

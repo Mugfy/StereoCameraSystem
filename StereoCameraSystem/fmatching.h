@@ -6,3 +6,5 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/features2d.hpp>
 #include <iostream>
+
+void featureMatching(const cv::Mat& img1Rectified, const cv::Mat& img2Rectified);

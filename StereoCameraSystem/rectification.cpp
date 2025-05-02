@@ -1,6 +1,6 @@
 #include "rectification.h"
 
-int rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, const cv::Mat& distCoeffs2, const cv::Mat& R, const cv::Mat& T) {
+std::pair<cv::Mat, cv::Mat> rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, const cv::Mat& distCoeffs2, const cv::Mat& R, const cv::Mat& T) {
     // Ouvrir les caméras
     cv::VideoCapture cap1(1); // Caméra sur le port USB 1
     cv::VideoCapture cap2(2); // Caméra sur le port USB 2
@@ -8,7 +8,6 @@ int rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, co
 
     if (!cap1.isOpened() || !cap2.isOpened()) {
         std::cerr << "Erreur : Impossible d'ouvrir les caméras pour la rectification stéréo." << std::endl;
-        return -1;
     }
 
     // Lire une image de chaque caméra
@@ -40,7 +39,5 @@ int rectify(const cv::Mat& K1, const cv::Mat& K2, const cv::Mat& distCoeffs1, co
     // Afficher les images rectifiées
     cv::imshow("Image Rectifiée Caméra 1", img1Rectified);
     cv::imshow("Image Rectifiée Caméra 2", img2Rectified);
-    cv::waitKey(0);
-
-    return 0;
+    return (std::make_pair(img1Rectified, img2Rectified));
 }

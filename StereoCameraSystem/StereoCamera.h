@@ -23,4 +23,9 @@ public:
     cv::Mat getT() const;
     cv::Mat getE() const;
     cv::Mat getF() const;
+
+    cv::Mat getK1() const;
+    cv::Mat getDC1() const;
+    cv::Mat getK2() const;
+    cv::Mat getDC2() const;
 };

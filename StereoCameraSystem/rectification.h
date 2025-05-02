@@ -5,6 +5,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/features2d.hpp>
+#include <utility>
 #include <iostream>
 
-int rectify(const cv::Mat&, const cv::Mat&, const cv::Mat&, const cv::Mat&);
+std::pair<cv::Mat, cv::Mat> rectify(const cv::Mat&, const cv::Mat&, const cv::Mat&, const cv::Mat&, const cv::Mat&, const cv::Mat&);
